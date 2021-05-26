@@ -11,6 +11,7 @@ import { postValidation } from './validation.js';
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { generateBlogPDF } from '../lib/pdf.js';
 
 const postsRouter = express.Router();
 
@@ -33,8 +34,25 @@ postsRouter.get('/', async (req, res, next) => {
 postsRouter.get('/:id', async (req, res, next) => {
   try {
     const posts = await getPosts();
+
     const post = posts.find((post) => post._id === req.params.id);
     res.send(post);
+  } catch (error) {
+    next(error);
+  }
+});
+postsRouter.get('/:id/pdf', async (req, res, next) => {
+  try {
+    const posts = await getPosts();
+    const post = posts.find((post) => post._id === req.params.id);
+    console.log(post);
+    const pdfStream = await generateBlogPDF(post);
+    console.log('RESPONSE:', res);
+    res.setHeader('Content-Type', 'application/pdf');
+    console.log('Headers:');
+
+    pdfStream.pipe(res);
+    pdfStream.end();
   } catch (error) {
     next(error);
   }
