@@ -4,6 +4,7 @@ import listEndpoints from 'express-list-endpoints';
 
 import authorsRouter from './authors/index.js';
 import postsRouter from './posts/index.js';
+import usersRouter from './users/index.js';
 import {
   badRequestErrorHandler,
   notFoundErrorHandler,
@@ -33,6 +34,7 @@ server.use(express.json());
 
 server.use('/authors', authorsRouter);
 server.use('/blogPosts', postsRouter);
+server.use('/users', usersRouter);
 
 server.use(badRequestErrorHandler);
 server.use(notFoundErrorHandler);
