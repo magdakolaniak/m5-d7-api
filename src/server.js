@@ -19,7 +19,7 @@ console.log(whitelist);
 const corsOptions = {
   origin: function (origin, next) {
     console.log('ORIGIN: ', origin);
-    if (whitelist.indexOf(origin) !== -1) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
       // origin allowed
       next(null, true);
     } else {
