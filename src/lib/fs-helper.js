@@ -34,3 +34,6 @@ export const writeCoverPicture = async (fileName, content) =>
 
 export const getCurrentFolderPath = (currentFile) =>
   dirname(fileURLToPath(currentFile));
+
+export const getAuthorsReadStream = () =>
+  fs.createReadStream(join(dataFolderPath, 'authors.json'));

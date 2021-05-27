@@ -6,6 +6,10 @@ import multer from 'multer';
 import { getAuthors, writeAuthors } from '../lib/fs-helper.js';
 import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { Transform } from 'json2csv';
+import { pipeline } from 'stream';
+
+import { getAuthorsReadStream } from '../lib/fs-helper.js';
 
 const authorsRouter = express.Router();
 
@@ -20,6 +24,23 @@ authorsRouter.get('/', async (req, res, next) => {
   try {
     const authors = await getAuthors();
     res.send(authors);
+  } catch (error) {
+    next();
+  }
+});
+authorsRouter.get('/csvDownload', async (req, res, next) => {
+  try {
+    const fields = ['name', 'surname', 'email', 'dateOfBirth'];
+    const opts = { fields };
+    const json2csv = new Transform(opts);
+    res.setHeader('Content-Disposition', `attachement; filenam=export.csv`);
+
+    const fileStream = getAuthorsReadStream();
+    pipeline(fileStream, json2csv, res, (err) => {
+      if (err) {
+        next(err);
+      }
+    });
   } catch (error) {
     next();
   }
