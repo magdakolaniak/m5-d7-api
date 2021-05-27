@@ -13,7 +13,7 @@ import {
 const server = express();
 const { PORT = 3001 } = process.env;
 
-const whitelist = [process.env.FRONTEND_DEV_URL];
+const whitelist = [process.env.FRONTEND_DEV_URL, process.env.FRONTEND_DEP_URL];
 console.log(whitelist);
 // middlewares part //
 const corsOptions = {

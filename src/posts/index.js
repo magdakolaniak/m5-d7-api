@@ -45,11 +45,10 @@ postsRouter.get('/:id/pdf', async (req, res, next) => {
   try {
     const posts = await getPosts();
     const post = posts.find((post) => post._id === req.params.id);
-    console.log(post);
+
     const pdfStream = await generateBlogPDF(post);
-    console.log('RESPONSE:', res);
+
     res.setHeader('Content-Type', 'application/pdf');
-    console.log('Headers:');
 
     pdfStream.pipe(res);
     pdfStream.end();
